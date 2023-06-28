@@ -4,14 +4,18 @@ public class Program
 {
     public static string GenerateSaleId(DateTime timestamp)
     {
-        char year = (char)('A' + (timestamp.Year - 2022));
+        char year = (char)('A' + (timestamp.Year - 2004));
         char month = (char)('A' + (timestamp.Month - 1));
-        string day = ConvertToRomanNumerals(timestamp.Day);
+        string day = ConvertToLetterNumberCombinations(timestamp.Day);
         string hour = timestamp.ToString("HH");
         string minutes = ConvertToLetterCombinations(timestamp.Minute);
         string seconds = ConvertToLetterCombinations(timestamp.Second);
+        // string millisecond = ConvertToLetterCombinations(timestamp.Millisecond);
+        string millisecond = timestamp.Millisecond.ToString();
 
-        string saleId = $"R{year}E{month}L{day}H{hour}M{minutes}S{seconds}";
+
+
+        string saleId = $"{year}-{month}-{day}-{hour}-{minutes}-{seconds}";
 
         return saleId;
     }
@@ -30,7 +34,7 @@ public class Program
 
     public static string ConvertToLetterCombinations(int number)
     {
-        if (number < 1 || number > 59)
+        if (number < 0 || number > 59)
         {
             throw new ArgumentOutOfRangeException(nameof(number), "Invalid minutes/seconds value");
         }
@@ -47,13 +51,36 @@ public class Program
 
         return result;
     }
+    public static string ConvertToLetterNumberCombinations(int number)
+    {
+        if (number < 1 || number > 59)
+        {
+            throw new ArgumentOutOfRangeException(nameof(number), "Invalid minutes/seconds value");
+        }
+
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        string result = "";
+
+        while (number > 0)
+        {
+            number--;
+            result = letters[number % 36] + result;
+            number /= 36;
+        }
+
+        return result;
+    }
 
     public static void Main(string[] args)
     {
-        DateTime timestamp = new DateTime(2022, 6, 6, 6, 12, 0);
-
+      
         string saleId = GenerateSaleId(DateTime.Now);
 
         Console.WriteLine($"Sale ID: {saleId}");
+
+
+        Console.WriteLine($"Sale ID: {DateTime.Now.Ticks.ToString().Substring(0, 10)}");
+
+        
     }
 }
