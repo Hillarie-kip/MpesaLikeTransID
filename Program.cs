@@ -16,13 +16,14 @@ public class Program
         string seconds = ConvertToLetterCombinations(timestamp.Second);
          string millisecond = ConvertToLetterCombinationsMillisec(timestamp.Millisecond);
         // string millisecond = timestamp.Millisecond.ToString();
-        string userID = ConvertToLetterCombinationsUserID(10);
-        string venodrLocationID = ConvertToLetterCombinationsUserID(10);
+        string userID = ConvertToLetterCombinationsID(10);
+        string vendorlocationIDE = ConvertToLetterCombinationsID(1111);
+        int vendorlocationIDD = ConvertToIDCombinationsLetter("34");
 
-
+        
 
         // string saleId = $"{year}-{month}-{day}-{hour}-{minutes}-{seconds}-{millisecond}";
-        string saleId = $"{year}{month}{day}{hour}{minutes}{seconds}{millisecond}-{userID}";
+        string saleId = $"{year}{month}{day}{hour}{minutes}{seconds}{millisecond}-{userID}-{vendorlocationIDE}-{vendorlocationIDD}";
 
         return saleId;
     }
@@ -81,7 +82,7 @@ public class Program
     }
 
 
-    public static string ConvertToLetterCombinationsUserID(int number)
+    public static string ConvertToLetterCombinationsID(int number)
     {
         if (number < 0 || number > 10000000)
         {
@@ -100,6 +101,35 @@ public class Program
 
         return result;
     }
+    public static int ConvertToIDCombinationsLetter(string letter)
+    {
+        if (string.IsNullOrEmpty(letter))
+        {
+            throw new ArgumentException("Letter cannot be null or empty", nameof(letter));
+        }
+
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+        letter = letter.ToUpper();
+
+        Dictionary<char, int> letterToNumber = new Dictionary<char, int>();
+        for (int i = 0; i < letters.Length; i++)
+        {
+            letterToNumber[letters[i]] = i + 1;
+        }
+
+        int number = 0;
+        for (int i = 0; i < letter.Length; i++)
+        {
+            if (!letterToNumber.TryGetValue(letter[i], out int value))
+            {
+                throw new ArgumentException("Invalid letter: " + letter[i], nameof(letter));
+            }
+            number = (number * 36) + value;
+        }
+        return number;
+    }
+
+
 
     public static int ConvertToNumber(string letter)
 {
