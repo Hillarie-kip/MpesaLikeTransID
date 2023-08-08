@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
 public class Program
 {
+    static int counter = 0;
+
     public static string GenerateSaleId(DateTime timestamp)
     {
         char year = (char)('A' + (timestamp.Year - 2006));
@@ -14,16 +17,18 @@ public class Program
        // string hour = timestamp.ToString("HH");
         string minutes = ConvertToLetterCombinations(timestamp.Minute);
         string seconds = ConvertToLetterCombinations(timestamp.Second);
-         string millisecond = ConvertToLetterCombinationsMillisec(timestamp.Millisecond);
+        string millisecond = ConvertToLetterCombinationsMillisec(timestamp.Millisecond);
         // string millisecond = timestamp.Millisecond.ToString();
-        string userID = ConvertToLetterCombinationsID(10);
-        string vendorlocationIDE = ConvertToLetterCombinationsID(1111);
+
+        string userID = ConvertToLetterCombinationsID(100000);
+        string vendorlocationIDE = ConvertToLetterCombinationsID(1);
         int vendorlocationIDD = ConvertToIDCombinationsLetter("34");
 
-        
+
 
         // string saleId = $"{year}-{month}-{day}-{hour}-{minutes}-{seconds}-{millisecond}";
-        string saleId = $"{year}{month}{day}{hour}{minutes}{seconds}{millisecond}-{userID}-{vendorlocationIDE}-{vendorlocationIDD}";
+      //  string saleId = $"{year}{month}{day}{hour}{minutes}{seconds}{millisecond}-{userID}-{vendorlocationIDE}-{vendorlocationIDD}";
+        string saleId = $"{year}{month}{day}{hour}{minutes}{seconds}{millisecond}-{userID}-{vendorlocationIDE}";
 
         return saleId;
     }
@@ -68,7 +73,7 @@ public class Program
             throw new ArgumentOutOfRangeException(nameof(number), "Invalid minutes/seconds value");
         }
 
-        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         string result = "";
 
         while (number > 0)
@@ -89,7 +94,7 @@ public class Program
             throw new ArgumentOutOfRangeException(nameof(number), "Invalid minutes/seconds value");
         }
 
-        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         string result = "";
 
         while (number > 0)
@@ -108,7 +113,7 @@ public class Program
             throw new ArgumentException("Letter cannot be null or empty", nameof(letter));
         }
 
-        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         letter = letter.ToUpper();
 
         Dictionary<char, int> letterToNumber = new Dictionary<char, int>();
@@ -138,7 +143,7 @@ public class Program
         throw new ArgumentException("Letter cannot be null or empty", nameof(letter));
     }
 
-    string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+    string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     letter = letter.ToUpper();
 
     int number = 0;
@@ -176,7 +181,7 @@ public class Program
             throw new ArgumentOutOfRangeException(nameof(number), "Invalid minutes/seconds value");
         }
 
-        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         string result = "";
 
         while (number > 0)
@@ -191,7 +196,8 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Timer timer = new Timer(1000); // 1 millisecond interval
+        int counter=0;
+        Timer timer = new Timer(1); // 1 millisecond interval
         timer.Elapsed += TimerElapsed;
         timer.AutoReset = true;
         timer.Start();
@@ -210,11 +216,35 @@ public class Program
         // Code to be executed every millisecond
         string saleId = GenerateSaleId(DateTime.Now);
 
-        Console.WriteLine($"Sale ID:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)} -- {saleId} ");
+         Console.WriteLine($"Sale ID:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)} -- {saleId} ");
+      
 
+      //  counter++;
+     //   counter = counter + 1000;
+     //   string combinedString = CombineCharacters(counter);
+     //   Console.WriteLine(counter.ToString()+" -- "+combinedString.ToString());
 
-       // Console.WriteLine($"Sale ID: {DateTime.Now.Ticks.ToString().Substring(0, 10)}");
-
+        // Console.WriteLine($"Sale ID: {DateTime.Now.Ticks.ToString().Substring(0, 10)}");
 
     }
+
+
+    static string CombineCharacters(int number)
+    {
+        string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string digits = "0123456789";
+
+        int baseCount = letters.Length;
+        string combinedString = "";
+
+        while (number > 0)
+        {
+            int remainder = (number - 1) % baseCount;
+            combinedString = letters[remainder] + combinedString;
+            number = (number - 1) / baseCount;
+        }
+
+        return combinedString;
+    }
+
 }
